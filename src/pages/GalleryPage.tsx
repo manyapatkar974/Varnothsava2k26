@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 
 const images = [
@@ -48,6 +48,29 @@ const images = [
 const GalleryPage = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  // Preload first 8 images for immediate display
+  useEffect(() => {
+    const preloadImages = images.slice(0, 8);
+    const linkElements: HTMLLinkElement[] = [];
+    
+    preloadImages.forEach((src) => {
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
+      link.href = src;
+      document.head.appendChild(link);
+      linkElements.push(link);
+    });
+
+    return () => {
+      linkElements.forEach((link) => {
+        if (link.parentNode) {
+          link.parentNode.removeChild(link);
+        }
+      });
+    };
+  }, []);
+
   return (
     <div className="min-h-screen pt-24 px-6 pb-12">
       <motion.h1 
@@ -88,6 +111,9 @@ const GalleryPage = () => {
                 <img 
                   src={img} 
                   alt={`Gallery ${i}`} 
+                  loading={i < 8 ? "eager" : "lazy"}
+                  decoding="async"
+                  fetchPriority={i < 4 ? "high" : i < 8 ? "auto" : "low"}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" 
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
