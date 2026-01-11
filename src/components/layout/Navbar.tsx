@@ -62,11 +62,19 @@ const Navbar = () => {
             alt="Varnothsava 2K26" 
             className="w-14 h-14 object-contain drop-shadow-lg hover:drop-shadow-xl transition-all"
           />
-          <div className="hidden sm:flex flex-col">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-500 to-yellow-300 font-festival text-xl font-black tracking-wider">
+          <div className="flex flex-col">
+            <span 
+              className="font-festival text-lg sm:text-xl font-black tracking-wider"
+              style={{
+                background: "linear-gradient(135deg, #fbbf24 0%, #ef4444 50%, #fbbf24 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
               VARNOTHSAVA
             </span>
-            <span className="text-yellow-500/80 font-semibold text-xs tracking-widest">
+            <span className="text-yellow-500 font-semibold text-xs tracking-widest">
               2K26
             </span>
           </div>

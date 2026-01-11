@@ -1,75 +1,13 @@
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { X } from "lucide-react";
+import { getGalleryImages } from "@/utils/imagePreloader";
 
-const images = [
-  "/gallery/image0.jpg",
-  "/gallery/image1.jpg",
-  "/gallery/image2.jpg",
-  "/gallery/image3.jpg",
-  "/gallery/image4.jpg",
-  "/gallery/image5.jpg",
-  "/gallery/image6.jpg",
-  "/gallery/image7.jpg",
-  "/gallery/image8.jpg",
-  "/gallery/image9.jpg",
-  "/gallery/image10.jpg",
-  "/gallery/image11.jpg",
-  "/gallery/image12.jpg",
-  "/gallery/image13.jpg",
-  "/gallery/image14.jpg",
-  "/gallery/image15.jpg",
-  "/gallery/image16.jpg",
-  "/gallery/image17.jpg",
-  "/gallery/image18.jpg",
-  "/gallery/image19.jpg",
-  "/gallery/image20.jpg",
-  "/gallery/image21.jpg",
-  "/gallery/image22.jpg",
-  "/gallery/image23.jpg",
-  "/gallery/image24.jpg",
-  "/gallery/image25.jpg",
-  "/gallery/image26.jpg",
-  "/gallery/image27.jpg",
-  "/gallery/image28.jpg",
-  "/gallery/image29.jpg",
-  "/gallery/image30.jpg",
-  "/gallery/image31.jpg",
-  "/gallery/image32.jpg",
-  "/gallery/image33.jpg",
-  "/gallery/image34.jpg",
-  "/gallery/image35.jpg",
-  "/gallery/image36.jpg",
-  "/gallery/image37.jpg",
-  "/gallery/image38.jpg",
-  "/gallery/image39.jpg",
-];
+// Images are preloaded globally when app starts, so they're cached by the browser
+const images = getGalleryImages();
 
 const GalleryPage = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
-  // Preload first 8 images for immediate display
-  useEffect(() => {
-    const preloadImages = images.slice(0, 8);
-    const linkElements: HTMLLinkElement[] = [];
-    
-    preloadImages.forEach((src) => {
-      const link = document.createElement("link");
-      link.rel = "preload";
-      link.as = "image";
-      link.href = src;
-      document.head.appendChild(link);
-      linkElements.push(link);
-    });
-
-    return () => {
-      linkElements.forEach((link) => {
-        if (link.parentNode) {
-          link.parentNode.removeChild(link);
-        }
-      });
-    };
-  }, []);
 
   return (
     <div className="min-h-screen pt-24 px-6 pb-12">
@@ -111,9 +49,8 @@ const GalleryPage = () => {
                 <img 
                   src={img} 
                   alt={`Gallery ${i}`} 
-                  loading={i < 8 ? "eager" : "lazy"}
+                  loading="eager"
                   decoding="async"
-                  fetchPriority={i < 4 ? "high" : i < 8 ? "auto" : "low"}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" 
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">

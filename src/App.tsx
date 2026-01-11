@@ -18,11 +18,17 @@ import GalleryPage from "@/pages/GalleryPage";
 import ProfilePage from "@/pages/ProfilePage";
 import FestCart from "@/components/cart/FestCart";
 import NotFound from "@/pages/NotFound";
+import { preloadGalleryImages } from "@/utils/imagePreloader";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const [showIntro, setShowIntro] = useState(true);
+
+  // Preload gallery images when app starts
+  useEffect(() => {
+    preloadGalleryImages();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
