@@ -9,8 +9,11 @@ const CulturalPage = () => {
   const { visitedEvents } = useCart();
   const culturalEvents = getEventsByCategory("cultural");
 
-  const day1Events = culturalEvents.filter(e => e.date.includes("15"));
-  const day2Events = culturalEvents.filter(e => e.date.includes("16"));
+  // Group events by actual dates (March 11, 12, 13, 14)
+  const day1Events = culturalEvents.filter(e => e.date.includes("March 11"));
+  const day2Events = culturalEvents.filter(e => e.date.includes("March 12"));
+  const day3Events = culturalEvents.filter(e => e.date.includes("March 13") && !e.date.includes("March 13-14"));
+  const day4Events = culturalEvents.filter(e => e.date.includes("March 14") || e.date.includes("March 13-14"));
 
   return (
     <div className="min-h-screen pt-24 px-6 pb-12">
@@ -82,7 +85,7 @@ const CulturalPage = () => {
             >
               DAY 1
             </div>
-            <span className="text-muted-foreground">March 15, 2026</span>
+            <span className="text-muted-foreground">March 11, 2026</span>
           </motion.div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {day1Events.map((event) => (
@@ -114,10 +117,74 @@ const CulturalPage = () => {
             >
               DAY 2
             </div>
-            <span className="text-muted-foreground">March 16, 2026</span>
+            <span className="text-muted-foreground">March 12, 2026</span>
           </motion.div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {day2Events.map((event) => (
+              <EventCard
+                key={event.id}
+                {...event}
+                isVisited={visitedEvents.includes(event.id)}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Day 3 */}
+      {day3Events.length > 0 && (
+        <section className="max-w-7xl mx-auto mb-12">
+          <motion.div
+            className="flex items-center gap-4 mb-6"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <div 
+              className="px-4 py-2 rounded-full font-display font-bold"
+              style={{
+                background: "linear-gradient(90deg, #00b4d8, #00d4ff)",
+                color: "#000",
+              }}
+            >
+              DAY 3
+            </div>
+            <span className="text-muted-foreground">March 13, 2026</span>
+          </motion.div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {day3Events.map((event) => (
+              <EventCard
+                key={event.id}
+                {...event}
+                isVisited={visitedEvents.includes(event.id)}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Day 4 */}
+      {day4Events.length > 0 && (
+        <section className="max-w-7xl mx-auto">
+          <motion.div
+            className="flex items-center gap-4 mb-6"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <div 
+              className="px-4 py-2 rounded-full font-display font-bold"
+              style={{
+                background: "linear-gradient(90deg, #00d4ff, #00b4d8)",
+                color: "#000",
+              }}
+            >
+              DAY 4
+            </div>
+            <span className="text-muted-foreground">March 14, 2026</span>
+          </motion.div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {day4Events.map((event) => (
               <EventCard
                 key={event.id}
                 {...event}
