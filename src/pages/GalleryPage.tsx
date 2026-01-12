@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { X } from "lucide-react";
 import { getGalleryImages } from "@/utils/imagePreloader";
 
@@ -8,6 +8,11 @@ const images = getGalleryImages();
 
 const GalleryPage = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  // Optimize animation delays for mobile - reduce delay interval
+  const optimizedDelays = useMemo(() => {
+    return images.map((_, i) => Math.min(i * 0.02, 0.5)); // Cap max delay at 0.5s
+  }, []);
 
   return (
     <div className="min-h-screen pt-24 px-6 pb-12">
@@ -37,8 +42,8 @@ const GalleryPage = () => {
                 className="aspect-square rounded-xl overflow-hidden cursor-pointer group relative"
                 initial={{ opacity: 0, scale: 0.8 }} 
                 whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }} 
-                transition={{ delay: i * 0.05 }}
+                viewport={{ once: true, margin: "-50px" }} 
+                transition={{ delay: optimizedDelays[i], duration: 0.3 }}
                 whileHover={{ scale: 1.05 }}
                 onClick={() => setSelectedImage(img)}
                 style={{
@@ -49,15 +54,16 @@ const GalleryPage = () => {
                 <img 
                   src={img} 
                   alt={`Gallery ${i}`} 
-                  loading="eager"
+                  loading="lazy"
                   decoding="async"
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" 
+                  className="gallery-image w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" 
+                  style={{ contentVisibility: "auto" }}
                 />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center pointer-events-none md:pointer-events-auto">
                   <motion.div
                     initial={{ opacity: 0 }}
                     whileHover={{ opacity: 1 }}
-                    className="text-white text-sm font-semibold"
+                    className="text-white text-sm font-semibold hidden md:block"
                   >
                     View
                   </motion.div>
@@ -77,8 +83,11 @@ const GalleryPage = () => {
           onClick={() => setSelectedImage(null)}
         >
           <motion.button 
-            className="absolute top-6 right-6 text-white hover:text-cyan-400 transition-colors"
-            onClick={() => setSelectedImage(null)}
+            className="absolute top-6 right-6 text-white hover:text-cyan-400 transition-colors z-10"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedImage(null);
+            }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
@@ -91,6 +100,7 @@ const GalleryPage = () => {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 200 }}
+            loading="eager"
           />
         </motion.div>
       )}

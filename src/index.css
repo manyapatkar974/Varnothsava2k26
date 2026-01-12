@@ -353,6 +353,24 @@
   }
 }
 
+  /* Mobile gallery optimizations */
+  @media (max-width: 768px) {
+    /* Reduce motion for better performance on mobile */
+    .gallery-image {
+      will-change: auto;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    
+    /* Optimize image rendering */
+    img[loading="lazy"] {
+      content-visibility: auto;
+      contain-intrinsic-size: 1px 400px;
+    }
+  }
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
