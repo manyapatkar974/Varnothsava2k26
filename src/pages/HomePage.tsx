@@ -6,6 +6,7 @@ import { events, festivalDate, getEventsByCategory } from "@/data/events";
 import { useCart } from "@/context/CartContext";
 import { MapPin, ExternalLink, Sparkles, Flame, Music, Utensils, Bike } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getGalleryImages } from "@/utils/imagePreloader";
 
 const HomePage = () => {
   const { visitedEvents } = useCart();
@@ -15,12 +16,9 @@ const HomePage = () => {
   const motoEvent = events.find((e) => e.id === "moto-mania");
   const foodEvents = getEventsByCategory("food").slice(0, 2);
 
-  const galleryImages = [
-    "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400",
-    "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400",
-    "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400",
-    "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400",
-  ];
+  // Use real gallery images instead of dummy images
+  const allGalleryImages = getGalleryImages();
+  const galleryImages = allGalleryImages.slice(0, 4); // Show first 4 gallery images
 
   return (
     <div className="min-h-screen">

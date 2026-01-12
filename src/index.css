@@ -351,7 +351,6 @@
       box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
     }
   }
-}
 
   /* Mobile gallery optimizations */
   @media (max-width: 768px) {
